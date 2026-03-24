@@ -964,10 +964,6 @@
     </userPermissions>
     <userPermissions>
         <enabled>true</enabled>
-        <name>ViewConsumption</name>
-    </userPermissions>
-    <userPermissions>
-        <enabled>true</enabled>
         <name>ViewContentTaxonomy</name>
     </userPermissions>
     <userPermissions>
