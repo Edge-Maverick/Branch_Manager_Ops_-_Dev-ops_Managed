@@ -1,5 +1,8 @@
 name: Run Code Analyzer 5 Workflow
 on:
+  push:
+    branches:
+      - 'Integration'
   workflow_dispatch:
     inputs:
       config_branch:
