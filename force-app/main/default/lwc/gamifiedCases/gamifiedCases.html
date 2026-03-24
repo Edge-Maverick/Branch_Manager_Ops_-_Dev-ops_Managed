@@ -1,0 +1,129 @@
+<template>
+    <lightning-card title="Open Cases Dashboard" icon-name="standard:case">
+        <div class="slds-m-around_medium">
+            <!-- Stats Section -->
+            <template if:true={stats}>
+                <div class="stats-container">
+                    <div class="stat-card total">
+                        <div class="stat-icon">
+                            <lightning-icon icon-name="standard:case" size="small"></lightning-icon>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number">{stats.totalOpen}</div>
+                            <div class="stat-label">Total Open</div>
+                        </div>
+                    </div>
+                    <div class="stat-card high">
+                        <div class="stat-icon">
+                            <lightning-icon icon-name="utility:warning" size="small"></lightning-icon>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number">{stats.highPriority}</div>
+                            <div class="stat-label">High Priority</div>
+                        </div>
+                    </div>
+                    <div class="stat-card medium">
+                        <div class="stat-icon">
+                            <lightning-icon icon-name="utility:alert" size="small"></lightning-icon>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number">{stats.mediumPriority}</div>
+                            <div class="stat-label">Medium Priority</div>
+                        </div>
+                    </div>
+                    <div class="stat-card low">
+                        <div class="stat-icon">
+                            <lightning-icon icon-name="utility:info" size="small"></lightning-icon>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number">{stats.lowPriority}</div>
+                            <div class="stat-label">Low Priority</div>
+                        </div>
+                    </div>
+                    <div class="stat-card resolved">
+                        <div class="stat-icon">
+                            <lightning-icon icon-name="utility:success" size="small"></lightning-icon>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number">{stats.resolvedToday}</div>
+                            <div class="stat-label">Resolved Today</div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Loading Spinner -->
+            <template if:true={isLoading}>
+                <div class="slds-align_absolute-center slds-m-vertical_large">
+                    <lightning-spinner alternative-text="Loading cases..." size="medium"></lightning-spinner>
+                </div>
+            </template>
+
+            <!-- Error Message -->
+            <template if:true={error}>
+                <div class="slds-text-color_error slds-m-vertical_medium">
+                    <lightning-icon icon-name="utility:error" size="small" class="slds-m-right_xx-small"></lightning-icon>
+                    {error}
+                </div>
+            </template>
+
+            <!-- Cases List -->
+            <template if:true={hasCases}>
+                <div class="slds-m-top_medium">
+                    <h3 class="slds-text-heading_small slds-m-bottom_small">Active Cases</h3>
+                    <div class="cases-list">
+                        <template for:each={cases} for:item="caseItem">
+                            <div key={caseItem.caseId} class="case-card" data-priority={caseItem.priority}>
+                                <div class="case-header">
+                                    <div class="case-number">
+                                        <lightning-formatted-url
+                                            value={caseItem.caseUrl}
+                                            label={caseItem.caseNumber}
+                                            target="_blank">
+                                        </lightning-formatted-url>
+                                    </div>
+                                    <div class={caseItem.priorityClass}>
+                                        {caseItem.priority}
+                                    </div>
+                                </div>
+                                <div class="case-subject">{caseItem.subject}</div>
+                                <div class="case-info">
+                                    <span class="info-item">
+                                        <lightning-icon icon-name="utility:user" size="xx-small"></lightning-icon>
+                                        {caseItem.ownerName}
+                                    </span>
+                                    <span class="info-item">
+                                        <lightning-icon icon-name="utility:clock" size="xx-small"></lightning-icon>
+                                        {caseItem.daysOpen} days open
+                                    </span>
+                                    <span class="info-item">
+                                        <lightning-icon icon-name="utility:layers" size="xx-small"></lightning-icon>
+                                        {caseItem.status}
+                                    </span>
+                                </div>
+                                <div class="urgency-section">
+                                    <div class="urgency-label">
+                                        <span>Urgency Score</span>
+                                        <span class="urgency-value">{caseItem.urgencyScore}/100</span>
+                                    </div>
+                                    <div class="urgency-bar">
+                                        <div class="urgency-fill" style={caseItem.urgencyBarStyle}></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </template>
+
+            <!-- No Cases Message -->
+            <template if:true={noCases}>
+                <div class="no-cases-message">
+                    <lightning-icon icon-name="utility:success" size="large"></lightning-icon>
+                    <p class="slds-text-heading_small slds-m-top_small">All Clear!</p>
+                    <p class="slds-text-color_weak">No open cases at the moment.</p>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>
