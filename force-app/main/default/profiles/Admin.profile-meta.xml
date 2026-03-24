@@ -5,11 +5,6 @@
         <default>false</default>
         <visible>true</visible>
     </applicationVisibilities>
-    <applicationVisibilities>
-        <application>MyCustomApp</application>
-        <default>false</default>
-        <visible>true</visible>
-    </applicationVisibilities>
     <custom>false</custom>
     <layoutAssignments>
         <layout>Branch_Manager__c-Branch Manager Layout</layout>
