@@ -141,10 +141,6 @@
         <type>CustomApplication</type>
     </appMenuItems>
     <appMenuItems>
-        <name>OIQ_Integration</name>
-        <type>ConnectedApp</type>
-    </appMenuItems>
-    <appMenuItems>
         <name>standard__ExpressionSetConsole</name>
         <type>CustomApplication</type>
     </appMenuItems>
