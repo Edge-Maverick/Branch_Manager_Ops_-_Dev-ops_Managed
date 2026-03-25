@@ -212,6 +212,42 @@
     animation: fillBar 1s ease-out;
 }
 
+/* Pagination */
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.pagination-info {
+    font-size: 0.875rem;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.page-indicator {
+    font-size: 0.875rem;
+    color: #1f2937;
+    font-weight: 500;
+    padding: 0 0.75rem;
+    white-space: nowrap;
+}
+
+.pagination-btn {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
 /* No Cases Message */
 .no-cases-message {
     text-align: center;
@@ -265,5 +301,19 @@
     .case-info {
         flex-direction: column;
         gap: 0.5rem;
+    }
+
+    .pagination-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .pagination-info {
+        text-align: center;
+    }
+
+    .pagination-controls {
+        justify-content: center;
+        flex-wrap: wrap;
     }
 }
