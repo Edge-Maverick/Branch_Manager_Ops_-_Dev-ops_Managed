@@ -4,12 +4,16 @@ import getCaseStats from '@salesforce/apex/GamifiedCasesController.getCaseStats'
 import { refreshApex } from '@salesforce/apex';
 
 export default class GamifiedCases extends LightningElement {
-    cases = [];
+    allCases = [];
     stats;
     error;
     isLoading = true;
     wiredCasesResult;
     wiredStatsResult;
+
+    // Pagination properties
+    pageSize = 10;
+    currentPage = 1;
 
     @wire(getOpenCases)
     wiredCases(result) {
@@ -17,7 +21,7 @@ export default class GamifiedCases extends LightningElement {
         const { data, error } = result;
 
         if (data) {
-            this.cases = data.map(caseItem => {
+            this.allCases = data.map(caseItem => {
                 return {
                     ...caseItem,
                     caseUrl: `/${caseItem.caseId}`,
@@ -26,10 +30,11 @@ export default class GamifiedCases extends LightningElement {
                     urgencyBarClass: this.getUrgencyBarClass(caseItem.urgencyScore)
                 };
             });
+            this.currentPage = 1;
             this.error = undefined;
         } else if (error) {
             this.error = error.body?.message || 'Error loading cases';
-            this.cases = [];
+            this.allCases = [];
         }
         this.isLoading = false;
     }
@@ -76,12 +81,62 @@ export default class GamifiedCases extends LightningElement {
         return 'urgency-fill low';
     }
 
+    // Pagination computed properties
+    get cases() {
+        const startIndex = (this.currentPage - 1) * this.pageSize;
+        const endIndex = startIndex + this.pageSize;
+        return this.allCases.slice(startIndex, endIndex);
+    }
+
+    get totalPages() {
+        return Math.ceil(this.allCases.length / this.pageSize);
+    }
+
     get hasCases() {
-        return !this.isLoading && this.cases && this.cases.length > 0;
+        return !this.isLoading && this.allCases && this.allCases.length > 0;
     }
 
     get noCases() {
-        return !this.isLoading && !this.error && (!this.cases || this.cases.length === 0);
+        return !this.isLoading && !this.error && (!this.allCases || this.allCases.length === 0);
+    }
+
+    get showPagination() {
+        return this.hasCases && this.totalPages > 1;
+    }
+
+    get isFirstPage() {
+        return this.currentPage === 1;
+    }
+
+    get isLastPage() {
+        return this.currentPage === this.totalPages;
+    }
+
+    get paginationInfo() {
+        const start = (this.currentPage - 1) * this.pageSize + 1;
+        const end = Math.min(this.currentPage * this.pageSize, this.allCases.length);
+        return `${start}-${end} of ${this.allCases.length}`;
+    }
+
+    // Pagination handlers
+    handleFirstPage() {
+        this.currentPage = 1;
+    }
+
+    handlePreviousPage() {
+        if (this.currentPage > 1) {
+            this.currentPage--;
+        }
+    }
+
+    handleNextPage() {
+        if (this.currentPage < this.totalPages) {
+            this.currentPage++;
+        }
+    }
+
+    handleLastPage() {
+        this.currentPage = this.totalPages;
     }
 
     handleRefresh() {
