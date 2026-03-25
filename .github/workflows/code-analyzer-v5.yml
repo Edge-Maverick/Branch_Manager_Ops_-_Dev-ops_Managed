@@ -4,7 +4,7 @@ on:
     inputs:
       config_branch:
         description: "Config branch"
-        required: false
+        required: true
         default: ""
 
 jobs:
