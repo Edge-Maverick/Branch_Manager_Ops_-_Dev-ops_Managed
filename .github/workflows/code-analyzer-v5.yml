@@ -1,10 +1,16 @@
 name: Run Code Analyzer 5 Workflow
 on:
+  push:
+    branches:
+      - 'Integration'
+  pull_request:
+    branches:
+      - 'Integration'
   workflow_dispatch:
     inputs:
       config_branch:
         description: "Config branch"
-        required: false
+        required: true
         default: ""
 
 jobs:
