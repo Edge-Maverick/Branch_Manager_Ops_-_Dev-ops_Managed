@@ -113,6 +113,54 @@
                             </div>
                         </template>
                     </div>
+
+                    <!-- Pagination Controls -->
+                    <template if:true={showPagination}>
+                        <div class="pagination-container">
+                            <div class="pagination-info">
+                                {paginationInfo}
+                            </div>
+                            <div class="pagination-controls">
+                                <lightning-button
+                                    variant="neutral"
+                                    icon-name="utility:chevronleft"
+                                    disabled={isFirstPage}
+                                    onclick={handleFirstPage}
+                                    title="First Page"
+                                    class="pagination-btn">
+                                </lightning-button>
+                                <lightning-button
+                                    variant="neutral"
+                                    icon-name="utility:back"
+                                    label="Previous"
+                                    disabled={isFirstPage}
+                                    onclick={handlePreviousPage}
+                                    class="pagination-btn">
+                                </lightning-button>
+                                <span class="page-indicator">
+                                    Page {currentPage} of {totalPages}
+                                </span>
+                                <lightning-button
+                                    variant="neutral"
+                                    icon-name="utility:forward"
+                                    icon-position="right"
+                                    label="Next"
+                                    disabled={isLastPage}
+                                    onclick={handleNextPage}
+                                    class="pagination-btn">
+                                </lightning-button>
+                                <lightning-button
+                                    variant="neutral"
+                                    icon-name="utility:chevronright"
+                                    icon-position="right"
+                                    disabled={isLastPage}
+                                    onclick={handleLastPage}
+                                    title="Last Page"
+                                    class="pagination-btn">
+                                </lightning-button>
+                            </div>
+                        </div>
+                    </template>
                 </div>
             </template>
 
