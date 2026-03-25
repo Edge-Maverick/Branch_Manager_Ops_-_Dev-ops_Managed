@@ -10,7 +10,7 @@ jobs:
   quality-gate:
     runs-on: ubuntu-latest
     permissions:
-      security-events: write # Required for GitHub Security Tab
+      security-events: write
       contents: read
     
     steps:
@@ -22,15 +22,19 @@ jobs:
           npm install -g @salesforce/cli@latest
           sf plugins install code-analyzer@latest
 
-      # --- STEP 1: SCAN (Using Standard Salesforce Rules) ---
-      - name: Run Code Analyzer (SARIF)
+      # --- SCAN (Dual Output: SARIF + HTML) ---
+      - name: Run Code Analyzer
         run: |
-          # We use .sarif to feed the GitHub Security Tab
-          # --severity-threshold 1 ensures the job fails on Critical errors
+          
           sf code-analyzer run \
             --workspace . \
             --output-file results.sarif \
             --severity-threshold 1
+
+          # 2. Generate HTML for the Workflow Artifacts (Developer View)
+          sf code-analyzer run \
+            --workspace . \
+            --output-file results.html
 
       - name: Upload to Security Tab
         if: always() 
@@ -38,7 +42,14 @@ jobs:
         with:
           sarif_file: results.sarif
 
-      # --- STEP 2: ORG VALIDATION ---
+      - name: Upload HTML Report Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: salesforce-code-scan-report
+          path: results.html
+
+      # ---  ORG VALIDATION ---
       - name: Authenticate Integration Org
         run: |
           echo "${{ secrets.SFDX_INTEGRATION_AUTH_URL }}" > auth_url.txt
@@ -47,7 +58,7 @@ jobs:
 
       - name: Validate Metadata (Check-Only)
         run: |
-          # This simulates the deployment to catch missing dependencies or failing tests
+          # Simulates the deployment to catch missing dependencies or failing tests
           sf project deploy validate \
             --source-dir force-app \
             --test-level RunLocalTests \
